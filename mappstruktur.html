@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mappstruktur – Årsredovisning 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+#header {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 52px;
+  background: #181825;
+  border-bottom: 1px solid #313244;
+  display: flex; align-items: center;
+  padding: 0 16px; gap: 12px;
+  z-index: 20;
+}
+
+#header h1 {
+  font-size: 13px; font-weight: 600;
+  color: #cba6f7; letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+#sep { color: #45475a; }
+
+#hint { font-size: 11px; color: #6c7086; white-space: nowrap; }
+
+/* Role selector */
+#roles {
+  display: flex; gap: 4px; margin-left: auto;
+}
+
+.role-btn {
+  padding: 4px 10px;
+  font-size: 11px; font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid #45475a;
+  background: transparent;
+  color: #a6adc8;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.role-btn:hover { background: #313244; color: #cdd6f4; }
+.role-btn.active {
+  background: #313244;
+  border-color: #cba6f7;
+  color: #cba6f7;
+}
+
+/* ── Legend ────────────────────────────────────────────────────────────── */
+#legend {
+  display: flex; gap: 10px; align-items: center;
+  padding-left: 12px;
+  border-left: 1px solid #313244;
+}
+.leg { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #a6adc8; }
+.leg-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+#main {
+  position: fixed;
+  top: 52px; left: 0; right: 0; bottom: 0;
+  display: flex;
+}
+
+#canvas {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+svg { width: 100%; height: 100%; cursor: grab; }
+svg.dragging { cursor: grabbing; }
+
+/* ── Tree styles ─────────────────────────────────────────────────────────── */
+.link { fill: none; stroke: #45475a; stroke-width: 1.5; }
+
+.node { cursor: pointer; }
+.node text {
+  font-size: 12px; dominant-baseline: middle;
+  pointer-events: none;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+.node rect { stroke-width: 1; }
+
+/* access overlays applied via JS */
+.node.access-read rect   { stroke-dasharray: 4 2 !important; }
+.node.access-none        { opacity: 0.18; filter: grayscale(0.8); }
+.node.access-edit-own rect { stroke-width: 2 !important; }
+
+/* ── Info panel ─────────────────────────────────────────────────────────── */
+#panel {
+  width: 0;
+  overflow: hidden;
+  background: #181825;
+  border-left: 1px solid #313244;
+  transition: width 0.3s ease;
+  flex-shrink: 0;
+  position: relative;
+}
+#panel.open { width: 320px; }
+
+#panel-inner {
+  width: 320px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+#panel-close {
+  position: absolute; top: 10px; right: 12px;
+  background: none; border: none;
+  color: #6c7086; font-size: 16px;
+  cursor: pointer; line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+#panel-close:hover { background: #313244; color: #cdd6f4; }
+
+#panel-name {
+  font-size: 14px; font-weight: 600;
+  color: #cba6f7;
+  padding-right: 28px;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+#panel-type {
+  font-size: 11px; color: #6c7086;
+  margin-bottom: 12px;
+}
+
+.panel-section {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #313244;
+}
+
+.panel-section h3 {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6c7086;
+  margin-bottom: 6px;
+}
+
+.panel-desc {
+  font-size: 12px; line-height: 1.6;
+  color: #a6adc8;
+}
+
+.panel-filnamn {
+  font-size: 11px;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  color: #89dceb;
+  background: #1e1e2e;
+  padding: 6px 8px;
+  border-radius: 5px;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+/* Access table in panel */
+.access-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 8px;
+  font-size: 12px;
+}
+.acc-role { color: #a6adc8; align-self: center; }
+.acc-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+.acc-edit  { background: #1a3a1a; color: #a9dfbf; border: 1px solid #27ae60; }
+.acc-read  { background: #1a2a3a; color: #aed6f1; border: 1px solid #2980b9; }
+.acc-own   { background: #3a2a00; color: #fad7a0; border: 1px solid #e67e22; }
+.acc-none  { background: #2a2a3a; color: #585b70; border: 1px solid #45475a; }
+.acc-note  {
+  grid-column: 1 / -1;
+  font-size: 10px; color: #6c7086;
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Access legend (shown when a role is active) */
+#access-legend {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  padding-left: 12px;
+  border-left: 1px solid #313244;
+}
+#access-legend.visible { display: flex; }
+.al-item { display: flex; align-items: center; gap: 4px; color: #a6adc8; }
+.al-dot { width: 20px; height: 9px; border-radius: 2px; border: 1px solid; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>Mappstruktur – Årsredovisning 2026</h1>
+  <span id="sep">|</span>
+  <span id="hint">Klicka nod = info &nbsp;·&nbsp; Scroll = zooma &nbsp;·&nbsp; Dra = panorera</span>
+
+  <div id="roles">
+    <button class="role-btn" data-role="processledare">Processledare</button>
+    <button class="role-btn" data-role="chefer">Chefer / Controllers</button>
+    <button class="role-btn" data-role="ansvarig">Ansvarig per avsnitt</button>
+    <button class="role-btn" data-role="alla">Alla i kanalen</button>
+  </div>
+
+  <div id="access-legend">
+    <div class="al-item">
+      <div class="al-dot" style="background:#1a3a1a;border-color:#27ae60"></div>Redigera
+    </div>
+    <div class="al-item">
+      <div class="al-dot" style="background:#1a2a3a;border-color:#2980b9"></div>Läsa
+    </div>
+    <div class="al-item">
+      <div class="al-dot" style="background:#3a2a00;border-color:#e67e22"></div>Redigera (egen)
+    </div>
+    <div class="al-item">
+      <div class="al-dot" style="background:#2a2a3a;border-color:#45475a;opacity:0.4"></div>Ingen tillgång
+    </div>
+  </div>
+
+  <div id="legend">
+    <div class="leg"><div class="leg-dot" style="background:#2980B9"></div>Överblick</div>
+    <div class="leg"><div class="leg-dot" style="background:#1E8449"></div>Processledaren</div>
+    <div class="leg"><div class="leg-dot" style="background:#CA6F1E"></div>Påverkan</div>
+    <div class="leg"><div class="leg-dot" style="background:#7D3C98"></div>Underlag</div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="canvas">
+    <svg id="tree-svg"><g id="zoom-group"></g></svg>
+  </div>
+
+  <div id="panel">
+    <button id="panel-close" title="Stäng">✕</button>
+    <div id="panel-inner">
+      <div id="panel-name"></div>
+      <div id="panel-type"></div>
+      <div id="panel-desc-sec" class="panel-section">
+        <h3>Beskrivning</h3>
+        <div id="panel-desc" class="panel-desc"></div>
+      </div>
+      <div id="panel-filnamn-sec" class="panel-section" style="display:none">
+        <h3>Filnamnskonvention</h3>
+        <div id="panel-filnamn" class="panel-filnamn"></div>
+      </div>
+      <div class="panel-section">
+        <h3>Tillgångsnivåer</h3>
+        <div id="panel-access" class="access-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// BOOTSTRAP — load data from mappstruktur_data.json, then init
+// ═══════════════════════════════════════════════════════════════════════════════
+fetch("mappstruktur_data.json")
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(data => init(data))
+  .catch(err => {
+    document.getElementById("canvas").innerHTML =
+      `<div style="padding:40px;color:#f38ba8;font-size:13px">
+        <b>Kunde inte ladda mappstruktur_data.json</b><br><br>
+        Öppnas filen lokalt (file://) måste du starta en lokal server:<br>
+        <code style="background:#1e1e2e;padding:4px 8px;border-radius:4px;display:inline-block;margin-top:8px">
+          python3 -m http.server
+        </code><br><br>
+        Besök sedan <code>http://localhost:8000/mappstruktur.html</code>
+      </div>`;
+    console.error("Fetch error:", err);
+  });
+
+function init(treeData) {
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// COLOURS
+// ═══════════════════════════════════════════════════════════════════════════════
+const PALETTE = {
+  root:          { fill:"#4A235A", text:"#FFFFFF", stroke:"#6c3483" },
+  Överblick:     { fill:"#1A5276", text:"#FFFFFF", stroke:"#2980B9" },
+  Processledaren:{ fill:"#145A32", text:"#FFFFFF", stroke:"#1E8449" },
+  Påverkan:      { fill:"#784212", text:"#FFFFFF", stroke:"#CA6F1E" },
+  Underlag:      { fill:"#4A235A", text:"#FFFFFF", stroke:"#7D3C98" },
+};
+const LEAF_PALETTE = {
+  root:          { fill:"#6c3483", text:"#FFFFFF", stroke:"#9b59b6" },
+  Överblick:     { fill:"#154360", text:"#AED6F1", stroke:"#2980B9" },
+  Processledaren:{ fill:"#0B5345", text:"#A9DFBF", stroke:"#1E8449" },
+  Påverkan:      { fill:"#6E2F04", text:"#FAD7A0", stroke:"#CA6F1E" },
+  Underlag:      { fill:"#4A235A", text:"#D2B4DE", stroke:"#7D3C98" },
+};
+
+function colors(d) {
+  const sec    = d.data.section || "root";
+  const isLeaf = !d.children && !d._children;
+  return isLeaf ? (LEAF_PALETTE[sec] || LEAF_PALETTE.root)
+                : (PALETTE[sec]      || PALETTE.root);
+}
+
+// Access colour per level for role overlay
+const ACC_STROKE = { edit:"#27ae60", read:"#2980b9", "edit-own":"#e67e22", none:"#45475a" };
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// LAYOUT
+// ═══════════════════════════════════════════════════════════════════════════════
+const NODE_W = 240, NODE_H = 28, H_GAP = 60, V_GAP = 8;
+const DURATION = 280;
+
+const svg  = d3.select("#tree-svg");
+const g    = d3.select("#zoom-group");
+
+const zoom = d3.zoom()
+  .scaleExtent([0.1, 3])
+  .on("zoom", e => {
+    g.attr("transform", e.transform);
+    svg.classed("dragging", e.sourceEvent?.type === "mousemove");
+  });
+svg.call(zoom);
+
+const treeLayout = d3.tree().nodeSize([NODE_H + V_GAP, NODE_W + H_GAP]);
+
+let root = d3.hierarchy(treeData);
+root.x0 = 0; root.y0 = 0;
+root.children.forEach(collapse);
+
+function collapse(d) {
+  if (d.children) { d._children = d.children; d._children.forEach(collapse); d.children = null; }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ROLE STATE
+// ═══════════════════════════════════════════════════════════════════════════════
+let activeRole = null;
+
+const ROLE_LABELS = {
+  processledare: "Processledare",
+  chefer:        "Chefer / Controllers",
+  ansvarig:      "Ansvarig per avsnitt",
+  alla:          "Alla i kanalen"
+};
+
+const ACC_LABELS = {
+  edit:     "Redigera",
+  read:     "Läsa",
+  "edit-own": "Redigera (egen sektion)",
+  none:     "Ingen tillgång"
+};
+
+const ACC_CLASS = {
+  edit:     "acc-edit",
+  read:     "acc-read",
+  "edit-own": "acc-own",
+  none:     "acc-none"
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DRAW / UPDATE
+// ═══════════════════════════════════════════════════════════════════════════════
+function update(source) {
+  treeLayout(root);
+  const nodes = root.descendants();
+  const links = root.links();
+
+  // ── Links ──────────────────────────────────────────────────────────────────
+  const link = g.selectAll(".link")
+    .data(links, d => d.target.data.name + d.target.depth);
+
+  link.enter().insert("path", ".node")
+    .attr("class", "link")
+    .attr("d", () => { const o={x:source.x0,y:source.y0}; return diag(o,o); })
+    .merge(link)
+    .transition().duration(DURATION)
+    .attr("d", d => diag(d.source, d.target));
+
+  link.exit().transition().duration(DURATION)
+    .attr("d", () => { const o={x:source.x,y:source.y}; return diag(o,o); })
+    .remove();
+
+  // ── Nodes ──────────────────────────────────────────────────────────────────
+  const node = g.selectAll(".node")
+    .data(nodes, d => d.data.name + d.depth);
+
+  const nodeEnter = node.enter().append("g")
+    .attr("class", "node")
+    .attr("transform", `translate(${source.y0},${source.x0})`)
+    .on("click", (event, d) => {
+      showPanel(d);
+      if (d.children)   { d._children = d.children; d.children  = null; }
+      else if(d._children) { d.children  = d._children; d._children = null; }
+      update(d);
+    });
+
+  nodeEnter.append("rect")
+    .attr("x", 0).attr("y", -NODE_H/2)
+    .attr("width", NODE_W).attr("height", NODE_H)
+    .attr("rx", 5).attr("ry", 5);
+
+  nodeEnter.append("text").attr("class", "node-label")
+    .attr("x", 10).attr("y", 0);
+
+  nodeEnter.append("text").attr("class", "collapse-icon")
+    .attr("x", NODE_W - 14).attr("y", 0)
+    .attr("font-size", "10px");
+
+  const nodeUpdate = nodeEnter.merge(node);
+
+  nodeUpdate.transition().duration(DURATION)
+    .attr("transform", d => `translate(${d.y},${d.x})`);
+
+  // apply colours (and access overlay if role active)
+  nodeUpdate.each(function(d) {
+    const el   = d3.select(this);
+    const col  = colors(d);
+    const acc  = activeRole ? (d.data.access?.[activeRole] || "none") : null;
+
+    el.select("rect")
+      .attr("fill",   col.fill)
+      .attr("stroke", acc ? ACC_STROKE[acc] : col.stroke)
+      .attr("stroke-width", acc === "edit-own" ? 2 : 1)
+      .attr("stroke-dasharray", acc === "read" ? "4 2" : null);
+
+    el.select(".node-label")
+      .attr("fill", col.text)
+      .text(() => {
+        const extra = d._children ? ` (${d._children.length})` : "";
+        return d.data.name + extra;
+      });
+
+    el.select(".collapse-icon")
+      .attr("fill", col.text)
+      .text((d.children || d._children) ? (d.children ? "▾" : "▸") : "");
+
+    // opacity for access filter
+    el.style("opacity", acc === "none" ? 0.18 : 1)
+      .style("filter",  acc === "none" ? "grayscale(0.8)" : null);
+  });
+
+  node.exit().transition().duration(DURATION)
+    .attr("transform", `translate(${source.y},${source.x})`)
+    .style("opacity", 0).remove();
+
+  nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+}
+
+function diag(s, t) {
+  const mx = (s.y + NODE_W/2 + t.y) / 2;
+  return `M${s.y+NODE_W},${s.x} C${mx},${s.x} ${mx},${t.x} ${t.y},${t.x}`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INFO PANEL
+// ═══════════════════════════════════════════════════════════════════════════════
+function showPanel(d) {
+  const data  = d.data;
+  const panel = document.getElementById("panel");
+  const isLeaf = !d.children && !d._children;
+
+  document.getElementById("panel-name").textContent = data.name;
+  document.getElementById("panel-type").textContent = isLeaf ? "Fil / Mapp utan undermappar" : "Mapp";
+
+  const desc = document.getElementById("panel-desc");
+  desc.textContent = data.desc || "Ingen beskrivning tillgänglig.";
+
+  const filSec = document.getElementById("panel-filnamn-sec");
+  if (data.filnamn) {
+    document.getElementById("panel-filnamn").textContent = data.filnamn;
+    filSec.style.display = "";
+  } else {
+    filSec.style.display = "none";
+  }
+
+  // Access grid
+  const grid = document.getElementById("panel-access");
+  grid.innerHTML = "";
+  const acc = data.access || {};
+  const roles = [
+    ["processledare", "Processledare"],
+    ["chefer",        "Chefer / Controllers"],
+    ["ansvarig",      "Ansvarig per avsnitt"],
+    ["alla",          "Alla i kanalen"],
+  ];
+  let hasOwn = false;
+  roles.forEach(([key, label]) => {
+    const level = acc[key] || "none";
+    if (level === "edit-own") hasOwn = true;
+
+    const roleEl  = document.createElement("div");
+    roleEl.className = "acc-role";
+    roleEl.textContent = label;
+
+    const badge = document.createElement("div");
+    badge.className = `acc-badge ${ACC_CLASS[level]}`;
+    badge.textContent = ACC_LABELS[level];
+
+    grid.appendChild(roleEl);
+    grid.appendChild(badge);
+  });
+
+  if (hasOwn) {
+    const note = document.createElement("div");
+    note.className = "acc-note";
+    note.textContent = "* Ansvarig har redigeringstillgång till sin tilldelade undermapp. Se Ansvarsfördelning.xlsx i Överblick.";
+    grid.appendChild(note);
+  }
+
+  panel.classList.add("open");
+}
+
+document.getElementById("panel-close").addEventListener("click", () => {
+  document.getElementById("panel").classList.remove("open");
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ROLE BUTTONS
+// ═══════════════════════════════════════════════════════════════════════════════
+document.querySelectorAll(".role-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const role = btn.dataset.role;
+    if (activeRole === role) {
+      // deactivate
+      activeRole = null;
+      btn.classList.remove("active");
+      document.getElementById("access-legend").classList.remove("visible");
+    } else {
+      activeRole = role;
+      document.querySelectorAll(".role-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("access-legend").classList.add("visible");
+    }
+    update(root);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════════
+update(root);
+
+requestAnimationFrame(() => {
+  const bounds = g.node().getBBox();
+  const canvas = document.getElementById("canvas");
+  const vw = canvas.clientWidth, vh = canvas.clientHeight;
+  const scale = Math.min(0.9, Math.min(vw/(bounds.width+80), vh/(bounds.height+80)));
+  const tx = (vw - bounds.width*scale)/2 - bounds.x*scale;
+  const ty = (vh - bounds.height*scale)/2 - bounds.y*scale;
+  svg.call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+});
+
+} // end init()
+</script>
+</body>
+</html>

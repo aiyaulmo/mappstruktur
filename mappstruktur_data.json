@@ -1,0 +1,278 @@
+{
+  "_readme": {
+    "format": "Varje nod har: name, section, desc, access (valfritt: filnamn, children).",
+    "section": "Styr färgkodning. Giltiga värden: root | Överblick | Processledaren | Påverkan | Underlag",
+    "access": {
+      "processledare": "edit | read | edit-own | none",
+      "chefer":        "edit | read | edit-own | none",
+      "ansvarig":      "edit | read | edit-own | none  (edit-own = ansvarig har tillgång till sin undermapp)",
+      "alla":          "edit | read | edit-own | none"
+    },
+    "filnamn": "Visas i infopanelen. Utelämna nyckeln om inte relevant."
+  },
+
+  "name": "Årsredovisning 2026",
+  "section": "root",
+  "desc": "Rotmapp för allt arbete med årsredovisningen. Strukturen speglar årsredovisningens kapitelindelning och är utformad för samarbete i Teams.",
+  "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" },
+
+  "children": [
+
+    {
+      "name": "Överblick",
+      "section": "Överblick",
+      "desc": "Processledarens centrala navigationsverktyg. Innehåller de tre överblicksdokumenten för ansvar, process och status.",
+      "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" },
+      "children": [
+        {
+          "name": "Ansvarsfördelning.xlsx",
+          "section": "Överblick",
+          "desc": "Visar vem som ansvarar för vilket avsnitt i årsredovisningen. Referensdokument för alla bidragsskribenter.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" }
+        },
+        {
+          "name": "Processöverblick.xlsx",
+          "section": "Överblick",
+          "desc": "Ger en överblick över hela arbetsprocessen, dess steg och tidsplan.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" }
+        },
+        {
+          "name": "Statusöverblick.xlsx",
+          "section": "Överblick",
+          "desc": "Tydliggör hur färdig processledaren anser att respektive avsnitt är. Läs detta ihop med senaste PDF under Versioner för att förstå nuläget.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" }
+        },
+        {
+          "name": "Versioner",
+          "section": "Överblick",
+          "desc": "Innehåller alltid den senaste PDF-versionen av årsredovisningen. När processledaren skapar en ny version läggs den här — den föregående flyttas till Äldre versioner.",
+          "filnamn": "arsredovisning-2026-hogskolan-dalarna_ÅÅÅÅ-MM-DD.pdf",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" },
+          "children": [
+            {
+              "name": "Äldre versioner",
+              "section": "Överblick",
+              "desc": "Arkiv för tidigare PDF-versioner. Versioner hamnar här automatiskt när en nyare version skapas under Versioner.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" }
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Processledaren",
+      "section": "Processledaren",
+      "desc": "Processledarens privata arbetsyta. Innehåller redaktionsverktyg, mallar och administrativa dokument. Ej relevant för bidragsskribenter.",
+      "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" },
+      "children": [
+        {
+          "name": "Redaktion och samordning",
+          "section": "Processledaren",
+          "desc": "Processledarens arbetsyta där det färdiga dokumentet sätts samman från bidragen i Underlag. Processledaren arbetar enbart i Word (.docx). Aktuell arbetsfil finns direkt i mappen, utanför Backups.",
+          "filnamn": "arsredovisning-2026-hogskolan-dalarna_ÅÅÅÅ-MM-DD.docx\nFler versioner samma dag: …_ÅÅÅÅ-MM-DD_A.docx, _B.docx …",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" },
+          "children": [
+            {
+              "name": "Backups",
+              "section": "Processledaren",
+              "desc": "Löpande kopior av arbetsfilen sparas här vid behov. Äldre DOCX-filer arkiveras hit.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" }
+            }
+          ]
+        },
+        {
+          "name": "Mallar",
+          "section": "Processledaren",
+          "desc": "Samtliga mallar som bidragsskribenter ska använda för ett enhetligt format i slutdokumentet. Processledaren ansvarar för att mallarna är aktuella och distribuerar dem till rätt avsnitt vid behov.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" },
+          "children": [
+            {
+              "name": "Dokument",
+              "section": "Processledaren",
+              "desc": "Dokumentmallar (.docx) för avsnittens löpande text.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" }
+            },
+            {
+              "name": "Figurer",
+              "section": "Processledaren",
+              "desc": "Mallar för figurer och illustrationer.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" }
+            },
+            {
+              "name": "Sammanfattningsrutor",
+              "section": "Processledaren",
+              "desc": "Mallar för sammanfattningsrutor i avsnitten.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" }
+            },
+            {
+              "name": "Tabeller",
+              "section": "Processledaren",
+              "desc": "Mallar för tabeller.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" }
+            }
+          ]
+        },
+        {
+          "name": "Ordning och reda",
+          "section": "Processledaren",
+          "desc": "Administrativa dokument som ska bifogas och skickas till Riksrevisionen tillsammans med årsredovisningen.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" },
+          "children": [
+            {
+              "name": "Fakturan",
+              "section": "Processledaren",
+              "desc": "Faktura att skicka till Riksrevisionen.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" }
+            },
+            {
+              "name": "Verifikat",
+              "section": "Processledaren",
+              "desc": "Verifikat att skicka till Riksrevisionen.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" }
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Påverkan",
+      "section": "Påverkan",
+      "desc": "Innehåller de styrande och kontextuella dokument som formar vad årsredovisningen bör innehålla. Referensmaterial som aldrig ska ändras av bidragsskribenter.",
+      "filnamn": "[beskrivning]_ÅÅÅÅ-MM-DD.pdf",
+      "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" },
+      "children": [
+        { "name": "Regleringsbrev",                  "section": "Påverkan", "desc": "Regleringsbrev och villkorsbeslut från regeringen.",               "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Granskningar",                    "section": "Påverkan", "desc": "Granskningsrapporter och revisionsutlåtanden.",                    "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Riksrevisionen",                  "section": "Påverkan", "desc": "Dokument relaterade till Riksrevisionens granskning.",             "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Årsredovisningar (3 år)",         "section": "Påverkan", "desc": "Högskolans tre senaste årsredovisningar som referensmaterial.",    "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Verksamhetsberättelse (3 år)",    "section": "Påverkan", "desc": "Tre senaste verksamhetsberättelserna.",                            "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Verksamhetsplan (3 år)",          "section": "Påverkan", "desc": "Tre senaste verksamhetsplanerna.",                                 "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Budgetunderlag (3 år)",           "section": "Påverkan", "desc": "Tre senaste budgetunderlagen.",                                    "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Riskhantering och analys (3 år)", "section": "Påverkan","desc": "Tre senaste riskanalyserna och riskhanteringsrapporterna.",         "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Strategi (pågående)",             "section": "Påverkan", "desc": "Högskolans pågående strategi oavsett tidshorisont.",               "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Vision (pågående)",               "section": "Påverkan", "desc": "Högskolans aktuella vision.",                                      "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Högskolan Dalarna",               "section": "Påverkan", "desc": "Högskolans egna referensdokument och bakgrundsmaterial.",          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Påverkansöverblick.xlsx",         "section": "Påverkan", "desc": "Översikt och förteckning över de påverkande dokumenten i mappen.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } }
+      ]
+    },
+
+    {
+      "name": "Underlag",
+      "section": "Underlag",
+      "desc": "Hjärtat i samarbetsstrukturen. Indelad efter årsredovisningens sektioner och avsnitt, så att varje ansvarig vet exakt var hens bidrag ska läggas.",
+      "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" },
+      "children": [
+        {
+          "name": "0 Omslag och förteckningar",
+          "section": "Underlag",
+          "desc": "Processledaren ansvarar för omslag, innehållsförteckning och tabellförteckning",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" }
+        },
+        {
+          "name": "1 Inramning",
+          "section": "Underlag",
+          "desc": "Inramningen av årsredovisningen – bakgrund, kontext och organisation.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+          "children": [
+            { "name": "1.1 Högskolan Dalarna i siffror", "section": "Underlag", "desc": "Nyckeltal och statistik om Högskolan Dalarna.",                    "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+            { "name": "1.2 Rektors förord",              "section": "Underlag", "desc": "Rektorns inledande förord till årsredovisningen.",                 "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+            { "name": "1.3 Från studentkåren",           "section": "Underlag", "desc": "Bidrag och perspektiv från studentkåren.",                        "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+            { "name": "1.4 Högskolans uppdrag",          "section": "Underlag", "desc": "Beskrivning av högskolans lagstadgade uppdrag.",                  "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+            { "name": "1.5 Högskolans strategi",         "section": "Underlag", "desc": "Högskolans strategiska inriktning.",                              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+            { "name": "1.6 Organisation",                "section": "Underlag", "desc": "Beskrivning av högskolans organisation och ledningsstruktur.",    "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+          ]
+        },
+        {
+          "name": "2 Resultat",
+          "section": "Underlag",
+          "desc": "Resultatredovisning per verksamhetsområde. Varje avsnitt har undermapparna Text och Tabeller för parallella arbetsflöden.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+          "children": [
+            {
+              "name": "2.1 Utbildning på grundnivå och avancerad nivå",
+              "section": "Underlag", "desc": "Resultat och redovisning för grund- och avancerad utbildning.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+              "children": [
+                { "name": "Text",     "section": "Underlag", "desc": "Löpande text för avsnittet. Hålls separerat för parallella arbetsflöden.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+                { "name": "Tabeller", "section": "Underlag", "desc": "Statistikfiler och tabeller. Kan ha annan ansvarig än Text.",             "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+              ]
+            },
+            {
+              "name": "2.2 Forskning och utbildning på forskarnivå",
+              "section": "Underlag", "desc": "Resultat för forskning och forskarutbildning.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+              "children": [
+                { "name": "Text",     "section": "Underlag", "desc": "Löpande text för avsnittet.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+                { "name": "Tabeller", "section": "Underlag", "desc": "Statistikfiler och tabeller.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+              ]
+            },
+            {
+              "name": "2.3 Samverkan, innovation och nyttiggörande",
+              "section": "Underlag", "desc": "Resultat för samverkan, innovation och nyttiggörande.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+              "children": [
+                { "name": "Text",     "section": "Underlag", "desc": "Löpande text för avsnittet.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+                { "name": "Tabeller", "section": "Underlag", "desc": "Statistikfiler och tabeller.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+              ]
+            },
+            {
+              "name": "2.4 Systematiskt kvalitetsarbete",
+              "section": "Underlag", "desc": "Redovisning av det systematiska kvalitetsarbetet.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+              "children": [
+                { "name": "Text",     "section": "Underlag", "desc": "Löpande text för avsnittet.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+                { "name": "Tabeller", "section": "Underlag", "desc": "Statistikfiler och tabeller.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+              ]
+            },
+            {
+              "name": "2.5 Jämställdhetsintegrering",
+              "section": "Underlag", "desc": "Redovisning av jämställdhetsintegreringen.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+              "children": [
+                { "name": "Text",     "section": "Underlag", "desc": "Löpande text för avsnittet.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+                { "name": "Tabeller", "section": "Underlag", "desc": "Statistikfiler och tabeller.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+              ]
+            },
+            {
+              "name": "2.6 Infrastruktur och verksamhetsstöd",
+              "section": "Underlag", "desc": "Redovisning av infrastruktur och verksamhetsstödsfunktioner.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+              "children": [
+                { "name": "Text",     "section": "Underlag", "desc": "Löpande text för avsnittet.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+                { "name": "Tabeller", "section": "Underlag", "desc": "Statistikfiler och tabeller.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+              ]
+            },
+            {
+              "name": "2.7 Personal och kompetensförsörjning",
+              "section": "Underlag", "desc": "Redovisning av personalfrågor och kompetensförsörjning.",
+              "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+              "children": [
+                { "name": "Text",     "section": "Underlag", "desc": "Löpande text för avsnittet.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+                { "name": "Tabeller", "section": "Underlag", "desc": "Statistikfiler och tabeller.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "3 Ekonomi",
+          "section": "Underlag",
+          "desc": "Ekonomisk redovisning inkl. resultat- och balansräkning.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
+          "children": [
+            { "name": "Text",     "section": "Underlag", "desc": "Löpande text för ekonomiavsnittet.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } },
+            { "name": "Tabeller", "section": "Underlag", "desc": "Ekonomiska tabeller och statistikfiler.", "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" } }
+          ]
+        },
+        {
+          "name": "4 Styrelse",
+          "section": "Underlag",
+          "desc": "Styrelsens handlingar och protokoll relevanta för årsredovisningen.",
+          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" }
+        }
+      ]
+    }
+
+  ]
+}
