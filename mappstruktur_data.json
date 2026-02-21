@@ -150,7 +150,7 @@
         { "name": "Verksamhetsberättelse (3 år)", "section": "Påverkan", "desc": "Tre senaste verksamhetsberättelserna.",                            "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
         { "name": "Verksamhetsplan (3 år)",       "section": "Påverkan", "desc": "Tre senaste verksamhetsplanerna.",                                 "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
         { "name": "Budgetunderlag (3 år)",        "section": "Påverkan", "desc": "Tre senaste budgetunderlagen.",                                    "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
-        { "name": "Riskhantering (3 år)",         "section": "Påverkan","desc": "Tre senaste riskanalyserna och riskhanteringsrapporterna.",         "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
+        { "name": "Riskhantering (3 år)",         "section": "Påverkan", "desc": "Tre senaste riskanalyserna och riskhanteringsrapporterna.",         "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
         { "name": "Strategi (pågående)",          "section": "Påverkan", "desc": "Högskolans pågående strategi oavsett tidshorisont.",               "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
         { "name": "Vision (pågående)",            "section": "Påverkan", "desc": "Högskolans aktuella vision.",                                      "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
         { "name": "Högskolan Dalarna",            "section": "Påverkan", "desc": "Högskolans egna referensdokument och bakgrundsmaterial.",          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" } },
@@ -185,7 +185,7 @@
           ]
         },
         {
-          "name": "2 Resultat",
+          "name": "2 Resultatredovisningen",
           "section": "Underlag",
           "desc": "Resultatredovisning per verksamhetsområde. Varje avsnitt har undermapparna Text och Tabeller för parallella arbetsflöden.",
           "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
@@ -256,7 +256,7 @@
           ]
         },
         {
-          "name": "3 Ekonomi",
+          "name": "3 Ekonomiredovisning",
           "section": "Underlag",
           "desc": "Ekonomisk redovisning inkl. resultat- och balansräkning.",
           "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "edit-own", "alla": "none" },
