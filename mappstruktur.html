@@ -244,10 +244,10 @@ svg.dragging { cursor: grabbing; }
   </div>
 
   <div id="legend">
-    <div class="leg"><div class="leg-dot" style="background:#2980B9"></div>Överblick</div>
-    <div class="leg"><div class="leg-dot" style="background:#1E8449"></div>Processledaren</div>
-    <div class="leg"><div class="leg-dot" style="background:#CA6F1E"></div>Påverkan</div>
-    <div class="leg"><div class="leg-dot" style="background:#7D3C98"></div>Underlag</div>
+    <div class="leg"><div class="leg-dot" style="background:#388E3C"></div>Överblick</div>
+    <div class="leg"><div class="leg-dot" style="background:#7B1FA2"></div>Processledaren</div>
+    <div class="leg"><div class="leg-dot" style="background:#C62828"></div>Påverkan</div>
+    <div class="leg"><div class="leg-dot" style="background:#1976D2"></div>Underlag</div>
   </div>
 </div>
 
@@ -303,18 +303,18 @@ function init(treeData) {
 // COLOURS
 // ═══════════════════════════════════════════════════════════════════════════════
 const PALETTE = {
-  root:          { fill:"#4A235A", text:"#FFFFFF", stroke:"#6c3483" },
-  Överblick:     { fill:"#1A5276", text:"#FFFFFF", stroke:"#2980B9" },
-  Processledaren:{ fill:"#145A32", text:"#FFFFFF", stroke:"#1E8449" },
-  Påverkan:      { fill:"#784212", text:"#FFFFFF", stroke:"#CA6F1E" },
-  Underlag:      { fill:"#4A235A", text:"#FFFFFF", stroke:"#7D3C98" },
+  root:          { fill:"#1B1B2F", text:"#FFFFFF", stroke:"#444466" },
+  Överblick:     { fill:"#1B5E20", text:"#FFFFFF", stroke:"#388E3C" },
+  Processledaren:{ fill:"#4A148C", text:"#FFFFFF", stroke:"#7B1FA2" },
+  Påverkan:      { fill:"#7F0000", text:"#FFFFFF", stroke:"#C62828" },
+  Underlag:      { fill:"#0D47A1", text:"#FFFFFF", stroke:"#1976D2" },
 };
 const LEAF_PALETTE = {
-  root:          { fill:"#6c3483", text:"#FFFFFF", stroke:"#9b59b6" },
-  Överblick:     { fill:"#154360", text:"#AED6F1", stroke:"#2980B9" },
-  Processledaren:{ fill:"#0B5345", text:"#A9DFBF", stroke:"#1E8449" },
-  Påverkan:      { fill:"#6E2F04", text:"#FAD7A0", stroke:"#CA6F1E" },
-  Underlag:      { fill:"#4A235A", text:"#D2B4DE", stroke:"#7D3C98" },
+  root:          { fill:"#2a2a4a", text:"#FFFFFF", stroke:"#444466" },
+  Överblick:     { fill:"#2E7D32", text:"#C8E6C9", stroke:"#388E3C" },
+  Processledaren:{ fill:"#6A1B9A", text:"#E1BEE7", stroke:"#7B1FA2" },
+  Påverkan:      { fill:"#B71C1C", text:"#FFCDD2", stroke:"#C62828" },
+  Underlag:      { fill:"#1565C0", text:"#BBDEFB", stroke:"#1976D2" },
 };
 
 function colors(d) {
