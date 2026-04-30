@@ -25,21 +25,9 @@
       "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "none", "alla": "none" },
       "children": [
         {
-          "name": "Ansvarsfördelning.xlsx",
+          "name": "Ansvarsfördelning_och_tidsplan.xlsx",
           "section": "Överblick",
           "desc": "Visar vem som ansvarar för vilket avsnitt i årsredovisningen. Referensdokument för alla bidragsskribenter.",
-          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" }
-        },
-        {
-          "name": "Processöverblick.xlsx",
-          "section": "Överblick",
-          "desc": "Ger en överblick över hela arbetsprocessen, dess steg och tidsplan.",
-          "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" }
-        },
-        {
-          "name": "Statusöverblick.xlsx",
-          "section": "Överblick",
-          "desc": "Tydliggör hur färdig processledaren anser att respektive avsnitt är. Läs detta ihop med senaste PDF under Versioner för att förstå nuläget.",
           "access": { "processledare": "edit", "chefer": "edit", "ansvarig": "read", "alla": "read" }
         },
         {
